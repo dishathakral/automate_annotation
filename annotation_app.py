@@ -261,31 +261,4 @@ with col3:
             except Exception as e:
                 st.error(f"Error saving annotations: {str(e)}")
 
-    # Add delete button in column 3
-    st.markdown(f"<div style='text-align:center; margin-top: 10px;'><b>Delete a box:</b></div>", unsafe_allow_html=True)
-    if st.button("🗑️ Delete Selected Box", key="delete_selected_box_col3", help="Delete the selected bounding box"):
-        if (
-            st.session_state.get('drawing_mode', 'Transform') == "Transform"
-            and selected_box_id is not None
-        ):
-            # Remove from canvas (both rect and text label)
-            if delete_box_from_canvas(st.session_state.canvas_result, selected_box_id):
-                delete_box_from_json(selected_image_path, selected_box_id)
-                st.rerun()
-        else:
-            st.warning("Please select a box in Transform mode to delete.")
-
-def delete_box_from_canvas(canvas_result, box_id):
-    try:
-        if canvas_result is not None and hasattr(canvas_result, 'json_data') and canvas_result.json_data is not None:
-            objects = canvas_result.json_data.get("objects", [])
-            new_objects = [
-                o for o in objects
-                if o.get("box_id") != box_id
-            ]
-            canvas_result.json_data["objects"] = new_objects
-            st.success(f"Successfully deleted box {box_id} from canvas")
-            return True
-    except Exception as e:
-        st.error(f"Error deleting box from canvas: {str(e)}")
-    return False
+    
